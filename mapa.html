@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<title>Cidade de Santa Maria, RS, Brasil</title>
+		
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.2/leaflet.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.2/leaflet.css">
+<script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.72.0/src/L.Control.Locate.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol@0.72.0/dist/L.Control.Locate.min.css" />        
+<script src="https://docente.ifsc.edu.br/joao.quoos/scripts/js/coropletico/choropleth.js"></script>
+<script src='https://docente.ifsc.edu.br/joao.quoos/scripts/js/fullscreen/Leaflet.fullscreen.min.js'></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel='stylesheet' href="https://docente.ifsc.edu.br/joao.quoos/scripts/js/fullscreen/leaflet.fullscreen.css"/>
+
+
+<!-- Essa tag style CSS ajusta a página a largura dos dispositivos utilizados, Desktop, Smartphone e Tablet -->
+<style type="text/css">
+      html, body, #map {
+          width: 100%;
+          height: 100%;
+	z-index: 1;		  
+          margin: 0;
+      }
+    </style>
+    
+<!-- Essa tag style CSS converter a tons de cinza(grayscale) o mapa base OSM OpenStreetMaps-->
+<style type="text/css">
+.leaflet-tile-pane {
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+}
+    </style>
+		<style type="text/css">
+		.legend {
+			color: #555;
+			padding: 6px 8px;
+			font: 14px sans-serif, Arial, Helvetica;
+			font-weight: bold;
+			background: white;
+			background: rgba(255,255,255,0.8);
+			box-shadow: 0 0 15px rgba(0,0,0,0.2);
+			border-radius: 5px;
+		}
+		.legend ul {
+			list-style-type: none;
+			padding: 0;
+			margin: 0;
+			clear: both;
+		}
+		.legend li {
+			display: inline-block;
+			width: 30px;
+			height: 22px;
+		}
+		.legend .min {
+			float: left;
+			padding-bottom: 5px;
+		}
+		.legend .max {
+			float: right;
+		}
+		</style>
+	
+	<style>
+div.titulodalegenda {
+    position: fixed;
+	top: 0;
+	z-index: 2;
+    right: 0;
+    width: 170px;
+			color: #555;
+			padding: 6px 8px;
+			font: 14px sans-serif, Arial, Helvetica;
+			font-weight: bold;
+			background: white;
+			background: rgba(255,255,255,0.8);
+			box-shadow: 0 0 15px rgba(0,0,0,0.2);
+			border-radius: 0px;
+}
+</style>
+	<style>
+div.tabelapag {
+    display: none;
+    position: absolute;
+	top: 0;
+	z-index: 2;
+    left: 100;
+    width: 200px;
+			color: #333;
+			padding: 3px 3px;
+			font: 10px sans-serif, Arial, Helvetica;
+			background: white;
+			background: rgba(255,255,255,0.9);
+			box-shadow: 0 0 5px rgba(0,0,0,0.2);
+			border-radius: 0px;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+}
+
+th {
+  text-align: left;
+  padding: 0px;
+}
+td {
+  text-align: left;
+  padding: 0px;
+  white-space:nowrap;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+</style>		
+  </head>
+  <body>
+  
+  <div class="titulodalegenda">Casos Confirmados em 02/06/2020 <i class="fa fa-table" aria-hidden="true" onclick="mostratabela()"></i></div>
+
+<div id="tabelapag" class="tabelapag"></div>
+    <div id="map"></div>
+		<script type="text/javascript">
+		var map = L.map('map', {
+    fullscreenControl: {
+        pseudoFullscreen: false
+    }
+  })
+
+//  
+  .setView([-29.7061, -53.7964], 12);
+
+// Adiciona o mapa base desejado. Para conhecer alguns dos mapa base gratuitos disponíveis acesse o site: https://wiki.openstreetmap.org/wiki/Tile_servers
+L.tileLayer('	https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 18,
+  attribution: '<a href="http://www.openstreetmap.org/copyright">OSM</a>|Dados <a href="https://www.ufsm.br/coronavirus/observatorio/">Observ. Covid19 UFSM</a>'
+}).addTo(map)
+
+var dadostabela = [];//incluido para tabela
+
+// Adiciona o arquivo GeoJSON
+$.getJSON('../bairros.geojson', function (geojson) {
+
+//Ajustes das propriedados do mapa coroplético    
+  var choroplethLayer = L.choropleth(geojson, {
+    valueProperty: 'Confirmado',   //qual propriedade do GeoJSON que você irá utilizar
+    scale: ['#ffffff','#ffffd4','#fed98e','#fe9929','#d95f0e','#993404'],  //scala de cores aplicadas ao mapa e utilizadas na legenda gráfica do canto inferior direito
+    steps: 6, //Número de intervalos
+    mode: 'e', // método de distribuição nos intervalos q para quantil, e para equidistante, k para K-means
+    style: {
+      color: '#aaa', //Cor da borda dos polígonos
+      weight: 1, //Largura da borda dos polígonos
+      fillOpacity: 0.7 //Opacidade da polígono no mapa. 0 = total transparência, 1 = sem transparência.
+    },
+    onEachFeature: function (feature, layer) {
+
+// Ajuste do texto Popup que aparece ao clicar nos polígonos.
+      layer.bindPopup('Bairro: ' + feature.properties.NOME + '<br><b>' + feature.properties.Confirmado.toLocaleString() + '</b> Caso(s) confirmado(s) e <b>' + feature.properties.Obitos.toLocaleString() + '</b> óbito(s).')
+      
+// Inclua aqui novas linhas ou edite caso mude os atributos utilizados no GeoJSON. Verifique a inclusão dos mesmo caso ocorra novas inserções na criação da tabela em GenerateTable
+                  dadostabela.push({
+                NOME: feature.properties.NOME,
+                Confirmado: feature.properties.Confirmado,
+                Obitos: feature.properties.Obitos
+            })
+      
+    }
+  }).addTo(map)
+  var legend = L.control({ position: 'bottomright' })
+  legend.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'info legend')
+    var limits = choroplethLayer.options.limits
+    var colors = choroplethLayer.options.colors
+    var labels = []
+
+     div.innerHTML = '<div class="labels"><div class="min">' + limits[0] + '</div> \
+			<div class="max">' + limits[limits.length - 1] + '</div></div>'
+
+    limits.forEach(function (limit, index) {
+      labels.push('<li style="background-color: ' + colors[index] + '"></li>')
+    })
+    div.innerHTML += '<ul>' + labels.join('') + '</ul>'
+    return div
+  }
+	legend.addTo(map);
+})
+
+lc = L.control.locate({
+    strings: {
+        title: "Mostrar a sua localização"
+    }
+}).addTo(map);
+
+//Criando a tabela em HTML que mostra os dados
+		function GenerateTable() {
+    var table = document.createElement("TABLE");
+    table.border = "1";
+
+    //Lembre-se que o título apresentado deve estar abreviado para não ocupar muito espaço na tabela e ficar dentro do mapa. No exemplo são criadas 3 colunas pois são usados 3 atributos de dados do GeoJSON.
+    var row = table.insertRow(-1);
+        var headerCell = document.createElement("TH");
+        headerCell.innerHTML = "Bairro";  //Campo NOME dos atributos no GeoJSON
+        row.appendChild(headerCell);
+        var headerCell = document.createElement("TH");
+        headerCell.innerHTML = "Nºs";   //Campo confirmado dos atributos no GeoJSON
+        row.appendChild(headerCell);
+        var headerCell = document.createElement("TH");
+        headerCell.innerHTML = "Ób.";   //Campo Obitos dos atributos no GeoJSON
+        row.appendChild(headerCell);        
+
+    //Preenchendo as linhas om os dados dos atributos do GeoJSON. Caso aumente as colunas de dados é necessário copiar e colocar nova var cell e cell.inner.
+    for (var i = 0; i < dadostabela.length; i++) {
+        row = table.insertRow(-1);
+
+            var cell = row.insertCell(-1);
+            cell.innerHTML = dadostabela[i].NOME;       //Campo NOME dos atributos no GeoJSON
+            var cell = row.insertCell(-1);
+            cell.innerHTML = dadostabela[i].Confirmado;     //Campo confirmado dos atributos no GeoJSON
+            var cell = row.insertCell(-1);
+            cell.innerHTML = dadostabela[i].Obitos;       //Campo Obitos dos atributos no GeoJSON     
+
+    }
+    var dvTable = document.getElementById("tabelapag");
+    dvTable.innerHTML = "";
+    dvTable.appendChild(table);
+}
+function tabeladiv() {
+  var x = document.getElementById("tabelapag");
+  if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+function mostratabela() {
+    tabeladiv();
+    GenerateTable();
+}
+</script>
+</body>
+</html>
