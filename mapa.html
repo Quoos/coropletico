@@ -143,7 +143,7 @@ L.tileLayer('	https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 var dadostabela = [];//incluido para tabela
 
 // Adiciona o arquivo GeoJSON
-$.getJSON('../bairros.geojson', function (geojson) {
+$.getJSON('dados_qgis/bairros.geojson', function (geojson) {
 
 //Ajustes das propriedados do mapa coroplético    
   var choroplethLayer = L.choropleth(geojson, {
