@@ -9,13 +9,13 @@ Entre os principais recursos adaptados para essa aplicação estão as seguintes
 - Botão para exibir em tela cheia (fullscreen),
 - Web design responsivo por meio do uso de HTML e CSS para redimensionar automaticamente a página e assim dar uma boa aparência em todos os dispositivos (computadores, tablets e telefones).
 
-(<a href="https://www.quoos.com.br/covid19/geo.mauricio.rizzatti/santamaria">Demo</a>) Demonstração do uso dos dados no site https://www.ufsm.br/coronavirus/observatorio/
+(<a href="https://www.quoos.com.br/covid19/geo.mauricio.rizzatti/santamaria">Demo</a>) Demonstração do uso dos dados no site https://www.ufsm.br/coronavirus/observatorio/ .
 
 ![screenshot](https://docente.ifsc.edu.br/joao.quoos/scripts/images/mapa_santamaria_geografiaufsm.png "Mapa coroplético usando LeafLet")
 
 
 ## Uso:
-Para replicar o uso do mesmo script com outros dados GeoJSON segue abaixo lista de edições necessárias no arquivo `mapa.html`.
+Para replicar o uso do mesmo script com outros dados GeoJSON segue abaixo lista de edições necessárias no arquivo `mapa.html`. Para que você possa fazer com o seu arquivo geoJSON gerado pelo software SIG deve conter os seguintes atributos de dados: `GEOCODIGO`, `NOME`, `Confirmado` e `Obitos`.
 
 ### Ajustes HTML
 
@@ -24,18 +24,18 @@ Para replicar o uso do mesmo script com outros dados GeoJSON segue abaixo lista 
 ``` html
 <title>Cidade de Santa Maria, RS, Brasil</title>
 ```
-- Insira título da legenda que será exibido no canto superior esquerdo do mapa (Linha 124). Junto ao título está o botão que carrega os dados da tabela na tela.
+- Insira título da legenda que será exibido no canto superior esquerdo do mapa (Linha 123). Junto ao título está o botão que carrega os dados da tabela na tela.
 ``` html 
 <div class="titulodalegenda">Casos Confirmados em 30/06/2020
 ```
 ### Ajuste no JavaScript
 
-- .setView: Defina no código Javascript a localização central do seu mapa por meio de uma coordenada geográfica e o nível de zoom aplicado ao mapa ao carregar (Linha 144).
+- .setView: Defina no código Javascript a localização central do seu mapa por meio de uma coordenada geográfica e o nível de zoom aplicado ao mapa ao carregar (Linha 135).
 ``` js
 .setView([-29.7061, -53.7964], 12);
 ```
 
-- L.tileLayer: Aqui você insere o código de URL para carregamento de mapa base. Na aplicação está indicada o uso do mapa base oferecido pela OpenStreetMaps (Linha 148). Em maxZoom vai indicar o máximo de zoom aplicado ao mapa quando o usuário realizar a ampliação. Em attribution será indicado os dados da fonte do mapa base e da origem do arquivo GeoJSON no formato HTML, tomando o cuidado para não deixar o texto muito extenso pois o mesmo é exibido no canto inferior direito do mapa.
+- L.tileLayer: Aqui você insere o código de URL para carregamento de mapa base. Na aplicação está indicada o uso do mapa base oferecido pela OpenStreetMaps (Linha 138). Em maxZoom vai indicar o máximo de zoom aplicado ao mapa quando o usuário realizar a ampliação. Em attribution será indicado os dados da fonte do mapa base e da origem do arquivo GeoJSON no formato HTML, tomando o cuidado para não deixar o texto muito extenso pois o mesmo é exibido no canto inferior direito do mapa.
 ``` js
 L.tileLayer('	https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 18,
@@ -43,12 +43,12 @@ L.tileLayer('	https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map)
 ```
 
-- getJSON: Indique a localização do arquivo GeoJSON. No exemplo ele está em uma pasta denominada dados_qgis (Linha 156).
+- getJSON: Indique a localização do arquivo GeoJSON. No exemplo ele está em uma pasta denominada dados_qgis (Linha 146).
 ``` js
 $.getJSON('dados_qgis/bairros.geojson', function (geojson) {
 ```
 
-- choroplethLayer: Aqui são indicadas as informações para que o mapa em GeoJSON seja exibido de forma coroplética (160). Em     valueProperty indique qual propriedade do GeoJSON que você irá utilizar, no exemplo é o atributo Confirmado. Em scale é indicado a escala de cores aplicadas ao mapa e utilizadas na legenda gráfica do canto inferior direito. Não é obrigatório indicar uma cor para cada classe, mas sim a cor do menor valor até o maior valor. Este campo exige a cor no formato hexadecimal mas pode exibir em outros formatos e é baseado em uma aplicação de cores denominada Chroma.js (https://vis4.net/chromajs/) muito eficiente para criação de paletas incluindo adaptação coroplética para daltônicos (https://gka.github.io/palettes/). Em steps é informado o número de intervalos no exemplo foram utilizados 6. Por fim e também muito importante é necessário indicar o método de distribuição nos intervalos, sendo q para quantil, e para equidistante, k para K-means.
+- choroplethLayer: Aqui são indicadas as informações para que o mapa em GeoJSON seja exibido de forma coroplética (150). Em     valueProperty indique qual propriedade do GeoJSON que você irá utilizar, no exemplo é o atributo Confirmado. Em scale é indicado a escala de cores aplicadas ao mapa e utilizadas na legenda gráfica do canto inferior direito. Não é obrigatório indicar uma cor para cada classe, mas sim a cor do menor valor até o maior valor. Este campo exige a cor no formato hexadecimal mas pode exibir em outros formatos e é baseado em uma aplicação de cores denominada Chroma.js (https://vis4.net/chromajs/) muito eficiente para criação de paletas incluindo adaptação coroplética para daltônicos (https://gka.github.io/palettes/). Em steps é informado o número de intervalos no exemplo foram utilizados 6. Por fim e também muito importante é necessário indicar o método de distribuição nos intervalos, sendo q para quantil, e para equidistante, k para K-means.
 ``` js
 valueProperty: 'Confirmado',
 scale: ['#ffffff','#ffffd4','#fed98e','#fe9929','#d95f0e','#993404'],
