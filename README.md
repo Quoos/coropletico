@@ -15,7 +15,9 @@ Entre os principais recursos adaptados para essa aplicação estão as seguintes
 
 
 ## Uso:
-Para replicar o uso do mesmo script com outros dados GeoJSON segue abaixo lista de edições necessárias no arquivo `mapa.html`. Para que você possa fazer com o seu arquivo geoJSON gerado pelo software SIG deve conter os seguintes atributos de dados: `GEOCODIGO`, `NOME`, `Confirmado` e `Obitos`.
+- Para replicar o uso do mesmo script com outros dados GeoJSON segue abaixo lista de edições necessárias no arquivo `mapa.html`.
+- Além disso quando seu arquivo geoJSON for gerado pelo software SIG o mesmo deve conter os seguintes atributos de dados:`NOME`, `Confirmado` e `Obitos`.
+- (Importante) A função Geolocalização só funciona em servidor 'HTTPS' e o carregamento do arquivo GeoJSON só ocorre quando a consulta do arquivo `mapa.html`ocorrer em um serviço HTTP, não vai funciona se for file:///.
 
 ### Ajustes HTML
 
