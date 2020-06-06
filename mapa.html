@@ -163,7 +163,7 @@ $.getJSON('dados_qgis/bairros.geojson', function (geojson) {
       
 // Inclua aqui novas linhas ou edite caso mude os atributos utilizados no GeoJSON. Verifique a inclusão dos mesmo caso ocorra novas inserções na criação da tabela em GenerateTable
                   dadostabela.push({
-                bairros: feature.properties.bairros,
+                bairro: feature.properties.bairro,
                 confirmados: feature.properties.confirmados,
                 obitos: feature.properties.obitos
             })
