@@ -15,8 +15,10 @@ Entre os principais recursos adaptados para essa aplicação estão as seguintes
 
 
 ## Uso:
+
 - Para replicar o uso do mesmo script com outros dados GeoJSON segue abaixo lista de edições necessárias no arquivo `mapa.html`.
-- Além disso quando seu arquivo geoJSON for gerado pelo software SIG o mesmo deve conter os seguintes atributos de dados:`NOME`, `Confirmado` e `Obitos`.
+- Além disso quando seu arquivo geoJSON for gerado pelo software SIG o mesmo deve conter os seguintes atributos de dados:`bairro`, `confirmados` e `obitos` sem o uso de acentos. Em caso de dúvidas utilize o arquivo GeoJSON do exemplo como referência.
+
 - (Importante) A função Geolocalização só funciona em servidor 'HTTPS' e o carregamento do arquivo GeoJSON só ocorre quando a consulta do arquivo `mapa.html`ocorrer em um serviço HTTP, não vai funciona se for file:///.
 
 ### Ajustes HTML
@@ -52,7 +54,7 @@ $.getJSON('dados_qgis/bairros.geojson', function (geojson) {
 
 - choroplethLayer: Aqui são indicadas as informações para que o mapa em GeoJSON seja exibido de forma coroplética (150). Em     valueProperty indique qual propriedade do GeoJSON que você irá utilizar, no exemplo é o atributo Confirmado. Em scale é indicado a escala de cores aplicadas ao mapa e utilizadas na legenda gráfica do canto inferior direito. Não é obrigatório indicar uma cor para cada classe, mas sim a cor do menor valor até o maior valor. Este campo exige a cor no formato hexadecimal mas pode exibir em outros formatos e é baseado em uma aplicação de cores denominada Chroma.js (https://vis4.net/chromajs/) muito eficiente para criação de paletas incluindo adaptação coroplética para daltônicos (https://gka.github.io/palettes/). Em steps é informado o número de intervalos no exemplo foram utilizados 6. Por fim e também muito importante é necessário indicar o método de distribuição nos intervalos, sendo q para quantil, e para equidistante, k para K-means.
 ``` js
-valueProperty: 'Confirmado',
+valueProperty: 'confirmados',
 scale: ['#ffffff','#ffffd4','#fed98e','#fe9929','#d95f0e','#993404'],
 steps: 6,
 mode: 'e',
