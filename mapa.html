@@ -27,7 +27,7 @@
       }
     </style>
     
-<!-- Essa tag style CSS converter a tons de cinza(grayscale) o mapa base OSM OpenStreetMaps-->
+<!-- Essa tag style CSS converte a tons de cinza(grayscale) o mapa base OSM OpenStreetMaps-->
 <style type="text/css">
 .leaflet-tile-pane {
   -webkit-filter: grayscale(100%);
@@ -147,7 +147,7 @@ $.getJSON('dados_qgis/bairros.geojson', function (geojson) {
 
 //Ajustes das propriedados do mapa coroplético    
   var choroplethLayer = L.choropleth(geojson, {
-    valueProperty: 'Confirmado',   //qual propriedade do GeoJSON que você irá utilizar
+    valueProperty: 'confirmados',   //qual propriedade do GeoJSON que você irá utilizar
     scale: ['#ffffff','#ffffd4','#fed98e','#fe9929','#d95f0e','#993404'],  //scala de cores aplicadas ao mapa e utilizadas na legenda gráfica do canto inferior direito
     steps: 6, //Número de intervalos
     mode: 'e', // método de distribuição nos intervalos q para quantil, e para equidistante, k para K-means
@@ -159,13 +159,13 @@ $.getJSON('dados_qgis/bairros.geojson', function (geojson) {
     onEachFeature: function (feature, layer) {
 
 // Ajuste do texto Popup que aparece ao clicar nos polígonos.
-      layer.bindPopup('Bairro: ' + feature.properties.NOME + '<br><b>' + feature.properties.Confirmado.toLocaleString() + '</b> Caso(s) confirmado(s) e <b>' + feature.properties.Obitos.toLocaleString() + '</b> óbito(s).')
+      layer.bindPopup('Bairro: ' + feature.properties.bairro + '<br><b>' + feature.properties.confirmados.toLocaleString() + '</b> Caso(s) confirmado(s) e <b>' + feature.properties.obitos.toLocaleString() + '</b> óbito(s).')
       
 // Inclua aqui novas linhas ou edite caso mude os atributos utilizados no GeoJSON. Verifique a inclusão dos mesmo caso ocorra novas inserções na criação da tabela em GenerateTable
                   dadostabela.push({
-                NOME: feature.properties.NOME,
-                Confirmado: feature.properties.Confirmado,
-                Obitos: feature.properties.Obitos
+                bairros: feature.properties.bairros,
+                confirmados: feature.properties.confirmados,
+                obitos: feature.properties.obitos
             })
       
     }
@@ -203,13 +203,13 @@ lc = L.control.locate({
     //Lembre-se que o título apresentado deve estar abreviado para não ocupar muito espaço na tabela e ficar dentro do mapa. No exemplo são criadas 3 colunas pois são usados 3 atributos de dados do GeoJSON.
     var row = table.insertRow(-1);
         var headerCell = document.createElement("TH");
-        headerCell.innerHTML = "Bairro";  //Campo NOME dos atributos no GeoJSON
+        headerCell.innerHTML = "Bairro";  //Campo bairro dos atributos no GeoJSON atribuito anteriormente em dadostabela.push
         row.appendChild(headerCell);
         var headerCell = document.createElement("TH");
-        headerCell.innerHTML = "Nºs";   //Campo confirmado dos atributos no GeoJSON
+        headerCell.innerHTML = "Nºs";   //Campo confirmados dos atributos no GeoJSON atribuito anteriormente em dadostabela.push
         row.appendChild(headerCell);
         var headerCell = document.createElement("TH");
-        headerCell.innerHTML = "Ób.";   //Campo Obitos dos atributos no GeoJSON
+        headerCell.innerHTML = "Ób.";   //Campo obitos dos atributos no GeoJSON atribuito anteriormente em dadostabela.push
         row.appendChild(headerCell);        
 
     //Preenchendo as linhas om os dados dos atributos do GeoJSON. Caso aumente as colunas de dados é necessário copiar e colocar nova var cell e cell.inner.
@@ -217,11 +217,11 @@ lc = L.control.locate({
         row = table.insertRow(-1);
 
             var cell = row.insertCell(-1);
-            cell.innerHTML = dadostabela[i].NOME;       //Campo NOME dos atributos no GeoJSON
+            cell.innerHTML = dadostabela[i].bairro;       //Campo bairro dos atributos no GeoJSON atribuito anteriormente em dadostabela.push
             var cell = row.insertCell(-1);
-            cell.innerHTML = dadostabela[i].Confirmado;     //Campo confirmado dos atributos no GeoJSON
+            cell.innerHTML = dadostabela[i].confirmados;     //Campo confirmados dos atributos no GeoJSON atribuito anteriormente em dadostabela.push
             var cell = row.insertCell(-1);
-            cell.innerHTML = dadostabela[i].Obitos;       //Campo Obitos dos atributos no GeoJSON     
+            cell.innerHTML = dadostabela[i].obitos;       //Campo obitos dos atributos no GeoJSON atribuito anteriormente em dadostabela.push
 
     }
     var dvTable = document.getElementById("tabelapag");
