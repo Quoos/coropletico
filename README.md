@@ -1,6 +1,6 @@
 ## Mapa coroplético interativo de código aberto compatível com dispositivos móveis.
 ### Exemplo de aplicação na divulgação de dados da Covid-19.
-
+![screenshot](https://docente.ifsc.edu.br/joao.quoos/scripts/images/GeoJSON-para_coropletico_leaflet_mapa.jpg "mapa interativo em diversas plataformas")
 O presente conteúdo permitir exibir arquivo GeoJSON de polígonos e seus metadados oriundo de software SIG em formato coroplético usando a biblioteca JavaScript Leaflet e plugins. Dessa forma o usuário não necessita de adaptações ao código HTML e Javascript do site quando realiza atualização e ou substituição do arquivo GeoJSON.
 Entre os principais recursos adaptados para essa aplicação estão as seguintes funcionalidades:
 - Configuração de opções coropléticas por meio de plugin adicionados no script,
